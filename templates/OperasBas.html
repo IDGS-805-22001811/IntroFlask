@@ -1,0 +1,20 @@
+{% extends "layaout.html"%} {%block container%}
+
+<form action="/OperasBas" method="post">
+
+    <label>N1:</label>
+    <input type="text" name="n1"><br>
+    <label>N2:</label>
+    <input type="text" name="n2"><br>
+
+    <input type="radio" name="operacion" value="suma" {% if operacion=="suma" %}checked{% endif %}>Suma<br>
+    <input type="radio" name="operacion" value="resta" {% if operacion=="resta" %}checked{% endif %}>Resta<br>
+    <input type="radio" name="operacion" value="multiplicacion" {% if operacion=="multiplicacion" %}checked{% endif %}>Multiplicación<br>
+    <input type="radio" name="operacion" value="division" {% if operacion=="division" %}checked{% endif %}>División<br>
+
+    <input type="submit" value="Calcular">
+</form>
+
+{% if resultado %}
+<h3>El resultado es: {{ resultado }}</h3>
+{% endif %} {%endblock%}

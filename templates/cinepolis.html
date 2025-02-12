@@ -1,0 +1,94 @@
+ {% block container %}
+<style>
+    body {
+        background-color: #f5f5dc;
+        font-family: sans-serif;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    
+    form {
+        width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    
+    h3 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+    
+    input[type="text"],
+    input[type="radio"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+    }
+    
+    input[type="radio"] {
+        width: auto;
+        margin-right: 5px;
+    }
+    
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    
+    .error {
+        color: red;
+        margin-top: 10px;
+    }
+</style>
+<h1>Cinepolis</h1>
+
+<form action="/cinepolis" method="post">
+    <h3>Entradas</h3>
+    <label>Nombre: </label>
+    <input type="text" name="nombre" value="{{ nombre if nombre else '' }}"><br>
+
+    <label>Cantidad Compradores: </label>
+    <input type="text" name="compradores" value="{{ compradores if compradores else '' }}"><br>
+
+    <label>Tarjeta de cineco: </label>
+    <input type="radio" name="tarjeta" value="si" {% if tarjeta=='si' %}checked{% endif %}>Si
+    <input type="radio" name="tarjeta" value="no" {% if tarjeta=='no' %}checked{% endif %}>No<br>
+
+    <label>Cantidad de boletos: </label>
+    <input type="text" name="boletos" value="{{ boletos if boletos else '' }}"><br>
+
+    <h3>Salidas </h3>
+    <label>Valor a pagar: </label>
+    <input type="text" name="pago" value="{{ pago if pago else '' }}" readonly><br>
+
+    <h3>Acciones</h3>
+    <input type="submit" value="Procesar">
+    <input type="submit" formaction="/salir" value="Salir">
+</form>
+
+{% if error %}
+<p style="color: red;">{{ error }}</p>
+{% endif %} {% endblock %}
