@@ -1,12 +1,28 @@
 from flask import Flask, render_template, request
+import forms
 
 app=Flask(__name__)
 
 @app.route("/")
 def index():
     titulo="IDGS805"
-    lista=["Pedro,juan,Mario"]
+    lista=["Pedro,Juan,Mario"]
     return render_template("index.html",titulo=titulo,lista=lista)
+
+@app.route("/alumnos",methods=["GET","POST"])
+def alumnos():
+    mat=''
+    nom=''
+    ape=''
+    email=''
+    alumno_clase=forms.UserForm(request.form)
+    if request.method=="POST":
+        mat=alumno_clase.matricula.data
+        ape=alumno_clase.apellido.data
+        nom=alumno_clase.nombre.data
+        email=alumno_clase.email.data
+    print('Nombre: {}'.format(nom))
+    return render_template("alumnos.html",form=alumno_clase)
 
 @app.route("/ejemplo1")
 def ejemplo1():
@@ -159,5 +175,7 @@ def cine():
                     pago = total
     
     return render_template("cinepolis.html", pago=pago, error=error, nombre=nombre, compradores=compradores, tarjeta=tarjeta, boletos=boletos)
+
+
 if __name__=="__main__":
     app.run(debug=True,port=3000)
