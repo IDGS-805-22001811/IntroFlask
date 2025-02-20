@@ -1,0 +1,45 @@
+{% extends "layaout.html" %} {% block container %} {% import "_macros.html" as macros %}
+<h1>Signo Zodiaco</h1>
+<form action="" method="post" novalidate>
+
+    <div class="row control-group">
+        <div class="form-group form-group col-xs-12 floating-label-form-group controls">
+            {{ macros.campoNuevo(form.nombre, class='form-control') }}
+        </div>
+    </div>
+    <div class="row control-group">
+        <div class="form-group form-group col-xs-12 floating-label-form-group controls">
+            {{ macros.campoNuevo(form.apellidoMa, class='form-control') }}
+        </div>
+    </div>
+    <div class="row control-group">
+        <div class="form-group form-group col-xs-12 floating-label-form-group controls">
+            {{ macros.campoNuevo(form.apellidoPa, class='form-control') }}
+        </div>
+    </div>
+
+    <div class="row control-group">
+        <div class="form-group form-group col-xs-12 floating-label-form-group controls">
+            {{ macros.campoNuevo(form.fechaNacimiento, class='form-control') }}
+        </div>
+    </div>
+
+    <div class="row control-group">
+        <div class="form-group form-group col-xs-12 floating-label-form-group controls">
+            <label>Sexo:</label> {% for subfield in form.sexo %}
+            <div class="form-check">
+                {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <input type="submit" value="Imprimir" class="btn btn-primary" />
+</form>
+
+<h2>Hola {{ nom }} {{ apeMa }} {{ apePa }}, tienes {{ edad }} años y tu signo zodiacal es {{ signoZodiacal }}.</h2>
+<div>
+    <img src="{{ url_for('static', filename='img/' + signoZodiacal|lower + '.png') }}" alt="{{ signoZodiacal }}" width="100">
+</div>
+
+{% endblock %}

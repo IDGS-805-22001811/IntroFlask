@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import forms
+from datetime import datetime
 
 app=Flask(__name__)
 
@@ -16,13 +17,46 @@ def alumnos():
     ape=''
     email=''
     alumno_clase=forms.UserForm(request.form)
-    if request.method=="POST":
+    if request.method=="POST" and alumno_clase.validate():
         mat=alumno_clase.matricula.data
         ape=alumno_clase.apellido.data
         nom=alumno_clase.nombre.data
         email=alumno_clase.email.data
     print('Nombre: {}'.format(nom))
-    return render_template("alumnos.html",form=alumno_clase)
+    return render_template("alumnos.html",form=alumno_clase,mat=mat,nom=nom,ape=ape,email=email)
+
+def calcular_signo(fecha_nacimiento):
+    animales = [
+        "Rata", "Buey", "Tigre", "Conejo", "Dragon", "Serpiente",
+        "Caballo", "Cabra", "Mono", "Gallo", "Perro", "Cerdo"
+    ]
+    año = fecha_nacimiento.year    
+    indice = (año - 1924) % 12
+    return animales[indice]
+
+def calcular_edad(fecha_nacimiento):
+    hoy = datetime.today()
+    edad = hoy.year - fecha_nacimiento.year
+    if (hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+        edad = edad-1
+    return edad
+
+@app.route("/zodiaco", methods=["GET", "POST"])
+def zodiaco():
+    nom = ''
+    apeMa = ''
+    apePa = ''
+    signoZodiacal = ''
+    edad = ''
+    zodiaco_clase = forms.UserForm(request.form)
+    if request.method == "POST" and zodiaco_clase.validate():
+        nom = zodiaco_clase.nombre.data
+        apeMa = zodiaco_clase.apellidoMa.data
+        apePa = zodiaco_clase.apellidoPa.data
+        fecha_nacimiento = zodiaco_clase.fechaNacimiento.data
+        signoZodiacal = calcular_signo(fecha_nacimiento)
+        edad = calcular_edad(fecha_nacimiento)
+    return render_template("zodiaco.html",form=zodiaco_clase,nom=nom,apeMa=apeMa,apePa=apePa,signoZodiacal=signoZodiacal,edad=edad)
 
 @app.route("/ejemplo1")
 def ejemplo1():
