@@ -1,29 +1,51 @@
 from flask import Flask, render_template, request
 import forms
 from datetime import datetime
+from flask import g
+from flask_wtf.csrf import CSRFProtect
+
 
 app=Flask(__name__)
+app.secret_key='esta es una clave secreta'
+csrf=CSRFProtect()
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'),404
+
+@app.before_request
+def before_request():
+    g.nombre='Mario'
+    print("before 1")
+
+
+@app.after_request
+def after_request(response):
+    print("after 1")
+    return response
+    
 @app.route("/")
 def index():
     titulo="IDGS805"
     lista=["Pedro,Juan,Mario"]
     return render_template("index.html",titulo=titulo,lista=lista)
 
-@app.route("/alumnos",methods=["GET","POST"])
+@app.route("/alumnos", methods=["GET", "POST"])
 def alumnos():
-    mat=''
-    nom=''
-    ape=''
-    email=''
-    alumno_clase=forms.UserForm(request.form)
-    if request.method=="POST" and alumno_clase.validate():
-        mat=alumno_clase.matricula.data
-        ape=alumno_clase.apellido.data
-        nom=alumno_clase.nombre.data
-        email=alumno_clase.email.data
-    print('Nombre: {}'.format(nom))
-    return render_template("alumnos.html",form=alumno_clase,mat=mat,nom=nom,ape=ape,email=email)
+    mat = ''
+    nom = ''
+    ape = ''
+    email = ''
+    alumno_clase = forms.UserForm(request.form)  
+    if request.method == "POST" and alumno_clase.validate():
+        mat = alumno_clase.matricula.data
+        nom = alumno_clase.nombre.data
+        ape = alumno_clase.apellido.data
+        email = alumno_clase.email.data
+        mensaje = 'Bienvenido {}'.format(nom)
+        flash(mensaje)
+    return render_template("alumnos.html", form=alumno_clase, mat=mat, nom=nom, ape=ape, email=email)
+
 
 def calcular_signo(fecha_nacimiento):
     animales = [
@@ -212,4 +234,5 @@ def cine():
 
 
 if __name__=="__main__":
+    csrf.init_app(app)
     app.run(debug=True,port=3000)
